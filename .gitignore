@@ -15,7 +15,6 @@ lib*
 derby.log
 org.squeryl.tests.cfg
 profileOfH2Tests.html
-*.h2.db
 *.trace.db
 .sbtconfig
 .idea/*
