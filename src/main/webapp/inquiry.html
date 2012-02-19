@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Home</title>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default;at=content">
+
+        <script type="text/javascript">/*<![CDATA[*/
+
+            $(function(){
+              MyNameSpace = {};
+              $('#date').datepicker({"dateFormat":"yy/mm/dd"});
+              time = new Date();
+              $("#date").val( (time.getYear() + 1900) + "/" + ("0" + (time.getMonth() + 1)).slice(-2) + "/" + ("0" + time.getDate()).slice(-2));
+              $("#time").val( ("0" + time.getHours()).slice(-2) + ":" + ("0" + time.getMinutes()).slice(-2));
+
+              var complete = $("#complete")
+              complete.autocomplete( {source : "/json/search/member",
+                change : function(event,ui){
+              var item = ui.item
+              $("#phone_number").text(item.phone);
+              $("#agri_key").text(item.agriKey);
+              $("#h_member_id").val(item.mId);
+              $.getJSON("/json/find/land?mId=" + item.mId,function(json){
+                var ul = $('#place_id')
+                ul.empty();
+                $.each(json,function(){
+                  ul.append('<option value="' + this.id + '" class="lands" lng="' +
+                  this.lng + '" lat="' + this.lat + '" >' +
+                    this.address + '</option>');
+                });
+              });
+            }}).data("autocomplete")._renderItem = function(ul , item) {
+              return $("<li></li>").data("item.autocomplete",item)
+              .append("<a>" + item.label + "<br />tel:" + item.phone +  "</a>")
+              .appendTo(ul);
+            };
+
+            var latlng = new google.maps.LatLng(39, 138);
+            var opts = {
+            zoom: 14,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: latlng,
+            disableDoubleClickZoom : true
+            };
+            var map = new google.maps.Map(document.getElementById("map"), opts);
+            var marker = new google.maps.Marker({ position:latlng,map : map,title:"???"});
+            MyNameSpace.map = map;
+            MyNameSpace.marker = marker;
+            google.maps.event.addListener(map,"dblclick",function(event){
+              var latLng = event.latLng
+              $("#longitude").text(latLng.lng());
+              $("#latitude").text(latLng.lat());
+              marker.setPosition(latLng);
+            });
+            bindPlace($("#place_id"));
+
+
+            });
+
+            function bindPlace( placeId) {
+              placeId.bind("change", function(){
+                var land = $("select option:selected");
+                var latlng = new google.maps.LatLng(land.attr("lat"), land.attr("lng"));
+                $("#longitude").text(latlng.lng());
+                $("#latitude").text(latlng.lat());
+                MyNameSpace.map.setCenter(latlng);
+                MyNameSpace.marker.setPosition(latlng);
+                MyNameSpace.map.setZoom( 14);
+              });
+            };
+
+
+            /*]]>*/</script>
+
+      <h2>お問い合わせ受付</h2>
+      <p>
+          <form class="lift:inquiry.inputForm" method="POST">
+        
+        <fieldset id="member_info">
+
+        <div>農家の方の名前、電話番号、農家番号のいずれかを入力して、キーボードの下Key「↓」を押してください。</div>
+        <div><label>検索:</label><input type="text" id="complete" name="member" /> <input type="hidden" id="h_member_id" name="member_id" value="0" /></div>
+<div><label>農家番号:</label><span id="agri_key">0000001</span> </div>
+<div>電話番号:<span id="phone_number">000-0000-000</span></div>
+        </fieldset>
+        <fieldset id="place">
+        <div id="own_lands">
+            <h4>農地</h4>
+        <select id="place_id" name="place_id" size="5">
+        </select>
+        <span>
+          <div>経度:<span id="longitude">???</span> 緯度:<span id="latitude">???</span> </div>
+          <div id="map" style="width:500px; height:300px"></div>
+        </span>
+        </div>
+        </fieldset>
+        <fieldset id="cause">
+         <div><label>何が起きたか？</label><e:situation><input type="text" /></e:situation></div>
+         <div><label>詳細</label><textarea name="detail"></textarea></div>
+         <div><label>受付時間</label><input type="text" name="created_date" id="date" /> <input type="text" name="created_time" id="time" value="bb" /></div>
+         <div><label>記入者</label><e:receiver><input type="text" name="receiver" /></e:receiver></div>
+         <e:submit>fea</e:submit>
+        </fieldset>
+          </form>
+      </p>
+    </div>
+  </body>
+</html>
+

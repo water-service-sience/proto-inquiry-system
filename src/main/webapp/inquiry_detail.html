@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Home</title>
+  </head>
+  <body class="lift:content_id=main">
+  <div id="main" class="lift:surround?with=default;at=content">
+
+      <script type="text/javascript">/*<![CDATA[*/
+
+        $(function(){
+          var lng =new Number( $("#longitude").text());
+          var lat = new Number($("#latitude").text());
+          var latlng = new google.maps.LatLng(lat, lng);
+          var opts = {
+              zoom: 14,
+              mapTypeId: google.maps.MapTypeId.ROADMAP,
+              center: latlng,
+              disableDoubleClickZoom : true,
+              draggable : false,
+              scrollwheel:false
+          };
+          var map = new google.maps.Map(document.getElementById("map"), opts);
+          var marker = new google.maps.Marker({ position:latlng,map : map,title:"???"});
+        });
+      /*]]>*/</script>
+
+
+      <p>
+          <div>お問い合わせID:<span class="lift:InquiryEdit.id">1</span></span></div>
+      </p>
+
+      
+      <div class="lift:InquiryEdit.member fieldGroup">
+      <div>お問い合わせ者情報</div>
+      <div><span class="label">氏名:</span><e:name>竹下義晃(たけした よしてる)</e:name></div>
+      <div><span class="label">農家ID:</span><e:agriKey>232323</e:agriKey></div>
+      <div><span class="label">電話番号:</span><e:phone>090-2323-0855</e:phone></div>
+      <div><span class="label">住所:</span><e:address>東京都本郷</e:address></div>
+      </div>
+      <div class="lift:InquiryEdit.place fieldGroup">
+
+          <div>経度:<span id="longitude"><e:lng>???</e:lng></span> 緯度:<span id="latitude"><e:lat>???</e:lat></span> </div>
+          <div id="map" style="width:500px; height:300px"></div>
+      </div>
+
+      <div class="lift:InquiryEdit.info fieldGroup">
+          <div><span class="label">お問い合わせ日時:</span><e:created>2012/02/12</e:created></div>
+          <div><span class="label">記入者;</span><e:receiver></e:receiver></div>
+          <div><span class="label">状況</span><e:situation>水漏れ</e:situation></div>
+          <div><span class="label">詳細</span><e:detail>水漏れ</e:detail></div>
+      </div>
+
+      <form class="lift:InquiryEdit.edit" method="POST">
+          <fieldset>
+              <div><label>ステータス</label><e:status><select name=""><option>aaa</option></select></e:status>     </div>
+              <div><label>担当者</label><e:incharge><select><option>aaa</option></select></e:incharge></div>
+              <div><e:submit><input type="submit" value="更新" /></e:submit></div>
+          </fieldset>
+      </form>
+
+
+      <form class="lift:InquiryEdit.addRecord" method="POST">
+          <div>コメント</div>
+          <div><textarea name="message"></textarea></div>
+          <e:submit><input type="submit" value="追記" />  </e:submit>
+      </form>
+      <div>
+          <ul>
+              <li class="lift:InquiryEdit.records">
+                  <div>
+                      <div><span>記入者</span><e:writer></e:writer></div>
+                      <div><span>更新日</span><e:wrote></e:wrote></div>
+                      <div><e:message></e:message></div>
+                  </div>
+
+              </li>
+          </ul>
+
+      </div>
+
+
+
+  </div>
+  </body>
+</html>
+
