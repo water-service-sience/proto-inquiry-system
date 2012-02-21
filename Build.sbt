@@ -1,13 +1,14 @@
 name := "water-service-science"
  
 scalaVersion := "2.9.1"
+
+organization := "jp.utokyo"
  
 seq(webSettings: _*)
 
 // If using JRebel with 0.1.0 of the sbt web plugin
 //jettyScanDirs := Nil
 // using 0.2.4+ of the sbt web plugin
-scanDirectories in Compile := Nil
 
 //resolvers += "Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
 
